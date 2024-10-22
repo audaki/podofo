@@ -68,7 +68,7 @@ struct PODOFO_API PdfDrawTextMultiLineParams final
 struct PODOFO_API PdfPainterState final
 {
     PdfGraphicsState GraphicsState;
-    PdfTextState TextState;         ///< The current sematical text state
+    PdfTextState TextState;         ///< The current semantical text state
     nullable<Vector2> FirstPoint;
     nullable<Vector2> CurrentPoint;
 private:
@@ -201,6 +201,8 @@ private:
  *
  * All functions that take coordinates expect these to be in PDF User Units. Keep in mind that PDF has
  * its coordinate system origin at the bottom left corner.
+ * \remarks It should not be generally needede but you can cast the instance to
+ * PdfContentStreamOperators to access low level PDF operators
  */
 class PODOFO_API PdfPainter final : public PdfContentStreamOperators
 {
@@ -676,13 +678,15 @@ private:
     void addToPageResources(const PdfName& type, const PdfName& identifier, const PdfObject& obj);
 
     void drawTextAligned(const std::string_view& str, double x, double y, double width,
-        PdfHorizontalAlignment hAlignment, PdfDrawTextStyle style);
+        PdfHorizontalAlignment hAlignment);
 
-    void drawText(const std::string_view& str, double x, double y, bool isUnderline, bool isStrikeThrough);
+    void drawText(const std::string_view& str, double x, double y);
 
     void drawMultiLineText(const std::string_view& str, double x, double y, double width, double height,
         PdfHorizontalAlignment hAlignment, PdfVerticalAlignment vAlignment, bool clip, bool skipSpaces,
         PdfDrawTextStyle style);
+
+    void decorateText(const std::string_view& str, double x, double y, PdfDrawTextStyle style);
 
     void setLineWidth(double width);
 
